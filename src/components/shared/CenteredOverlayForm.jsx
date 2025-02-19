@@ -39,6 +39,11 @@ const StyledCentralizedContainer = styled(Container)`
     align-items: center;
     width: 50vw;
     min-height: 100vh;
+
+    @media (max-width: 500px) {
+        width: 80vw;
+    }
+
 `
 
 const StyledCentralizedContent = styled(Row)`
