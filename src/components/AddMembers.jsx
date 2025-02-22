@@ -7,12 +7,19 @@ import { groupNameState } from "../states/groupName";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../routes";
+import { Form } from "react-bootstrap";
 
 export const AddMembers = () => {
     const groupName = useRecoilValue(groupNameState)
     const [validated, setValidated] = useState(false)
+    const [groupMembersString, setGroupMembersString] = useState('')
     const [groupMembers, setGroupMembers] = useRecoilState(groupMembersState)
     const navigate = useNavigate()
+
+    const isSamsungInternet = () => {
+        console.log(window.navigator.userAgent)
+        return window.navigator.userAgent.includes('SAMSUNG')
+    }
 
     const header = `${groupName} 그룹 멤버들의 이름을 입력해 주세요`
 
@@ -22,6 +29,9 @@ export const AddMembers = () => {
 
         if(groupMembers.length > 0){
             navigate(ROUTES.EXPENSE_MAIN)
+        } 
+        else if(isSamsungInternet() && groupMembersString.length > 0){
+            setGroupMembersString(groupMembersString.split(','))
         }
     }
     
@@ -31,11 +41,19 @@ export const AddMembers = () => {
             validated={validated}
             handleSubmit={handleSubmit}
         >
-            <InputTags 
-                placeholder='이름 간 띄어쓰기'
-                onTags={(value) => setGroupMembers(value.values)}
-                data-testid='input-member-names'
-            />
+            { isSamsungInternet() ?
+                <Form.Control 
+                    placeholder="이름 간 컴마(,)로 구분"
+                    onChange={(e) => setGroupMembersString(e.target.value)}
+                />
+            :
+                <InputTags 
+                    placeholder='이름 간 띄어쓰기'
+                    onTags={(value) => setGroupMembers(value.values)}
+                    data-testid='input-member-names'
+                />
+            }
+
             { validated && groupMembers.length === 0 && (
                 <StyledErrorMessage>그룹 멤버들의 이름을 입력해 주세요</StyledErrorMessage>
             )}
