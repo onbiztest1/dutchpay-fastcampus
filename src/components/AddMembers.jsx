@@ -17,8 +17,7 @@ export const AddMembers = () => {
     const navigate = useNavigate()
 
     const isSamsungInternet = () => {
-        console.log(window.navigator.userAgent)
-        return window.navigator.userAgent.includes('SAMSUNG')
+        return window.navigator.userAgent.includes('SamsungBrowser')
     }
 
     const header = `${groupName} 그룹 멤버들의 이름을 입력해 주세요`
